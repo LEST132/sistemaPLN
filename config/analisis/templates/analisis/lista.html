@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de textos</title>
+</head>
+<body>
+    <h1>Lista de textos analizados</h1>
+    <ul>
+        {% for texto in textos %}
+            <li>
+                {{ texto.titulo }} - {{ texto.fecha_subida }}
+                <form action="{% url 'histograma' texto.id %}" method="get" style="display:inline;">
+                    <button type="submit">Generar histograma</button>
+                </form>
+
+            </li>
+        {% empty %}
+            <li>No hay textos cargados aún.</li>
+        {% endfor %}
+    </ul>
+    <p>
+        <form action="{% url 'subir_texto' %}" method="get" style="display:inline;">
+            <button type="submit">Subir un nuevo texto</button>
+        </form>
+    </p>
+</body>
+</html>

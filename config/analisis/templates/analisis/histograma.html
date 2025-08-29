@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Histograma de {{ texto.titulo }}</title>
+</head>
+<body>
+    <h1>Histograma de: {{ texto.titulo }}</h1>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Palabra</th>
+            <th>Frecuencia</th>
+        </tr>
+        {% for palabra, frecuencia in histograma %}
+        <tr>
+            <td>{{ palabra }}</td>
+            <td>{{ frecuencia }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'lista_textos' %}">Volver a la lista</a></p>
+</body>
+</html>

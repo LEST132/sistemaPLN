@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 matplotlib = "*"
 django = "*"
+nltk = "*"
 
 [dev-packages]
 

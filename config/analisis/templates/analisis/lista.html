@@ -13,16 +13,21 @@
                 <form action="{% url 'histograma' texto.id %}" method="get" style="display:inline;">
                     <button type="submit">Generar histograma</button>
                 </form>
-
+                <form action="{% url 'analizar_ngramas' texto.id %}" method="get" style="display:inline;">
+                    <button type="submit">Analizar n-gramas</button>
+                </form>
             </li>
         {% empty %}
             <li>No hay textos cargados aún.</li>
         {% endfor %}
     </ul>
-    <p>
+    <div style="margin-top:20px;">
+        <form action="{% url 'autocompletar' %}" method="get" style="display:inline;">
+            <button type="submit">Autocompletar texto</button>
+        </form>
         <form action="{% url 'subir_texto' %}" method="get" style="display:inline;">
             <button type="submit">Subir un nuevo texto</button>
         </form>
-    </p>
+    </div>
 </body>
 </html>

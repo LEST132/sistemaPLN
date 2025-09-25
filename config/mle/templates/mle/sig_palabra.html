@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Autocompletado con n-gramas (MLE)</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .formulario { background: #f5f5f5; padding: 1em; margin-bottom: 1em; border-radius: 8px; width: 500px;}
+        table { border-collapse: collapse; margin-top: 1em;}
+        th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left;}
+        th { background: #f0f0f0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <a href="{% url 'subir_corpus' %}">Subir nuevo corpus</a>
+    <h1>Autocompletado con n-gramas (MLE)</h1>
+    <form method="post" class="formulario">
+        {% csrf_token %}
+        <label>Corpus:</label>
+        <select name="corpus">
+            <option value="">--Selecciona--</option>
+            {% for archivo in archivos_corpus %}
+                <option value="{{ archivo }}" {% if archivo == corpus_seleccionado %}selected{% endif %}>{{ archivo }}</option>
+            {% endfor %}
+        </select><br>
+        <label>Palabras(predecir):</label><br>
+        <input type="text" name="input_usuario" value="{{ texto_usuario }}" size="60"><br>
+        <label>N para n-gramas:</label>
+        <input type="number" name="n" value="{{ n }}" min="1" style="width:60px;">
+        <label><input type="checkbox" name="fronteras" value="on" {% if usar_fronteras %}checked{% endif %}> Usar fronteras de oración (&lt;s&gt;, &lt;/s&gt;)</label><br>
+        <button type="submit">Sugerir</button>
+    </form>
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    {% if sugerencia %}
+        <h2>Sugerencia más probable:</h2>
+        <div style="font-size:1.3em; font-weight:bold;">{{ sugerencia }}</div>
+        <h3>sugerencias</h3>
+        <table>
+            <tr>
+                <th>Palabra siguiente</th>
+                <th>Conteo C(h,w)</th>
+                <th>Conteo C(h)</th>
+                <th>Probabilidad</th>
+            </tr>
+            {% for w, chw, ch, prob in tabla %}
+            <tr>
+                <td>{{ w }}</td>
+                <td>{{ chw }}</td>
+                <td>{{ ch }}</td>
+                <td>{{ prob|floatformat:3 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if ngramas_visualizacion %}
+        <hr>
+        <h2>Muestra de N-gramas Generados (n={{ n }})</h2>
+        <p>Estos son los primeros n-gramas creados a partir del corpus procesado. El modelo los usa para calcular las probabilidades:</p>
+        
+        <div style="background-color: #f4f4f4; border: 1px solid #ddd; padding: 15px; border-radius: 5px; max-height: 250px; overflow-y: auto; font-family: monospace; line-height: 1.6;">
+            {% for ng in ngramas_visualizacion %}
+                <span>{{ ng }}</span><br>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if corpus_fronteras %}
+    <hr>
+    <h2>Fronteras de oración en el corpus</h2>
+    <div style="background-color: #e3f2fd; border: 1px solid #90caf9; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; font-family: monospace; line-height: 1.6;">
+        {% for oracion in corpus_fronteras %}
+            {{ oracion }}<br>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <p><a href="{% url 'lista_textos' %}">Volver a la lista</a></p>
+</body>
+</html>

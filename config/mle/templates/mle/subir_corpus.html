@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir corpus</title>
+</head>
+<body>
+    <h1>Subir nuevo corpus (.txt)</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="archivo" accept=".txt" required>
+        <button type="submit">Subir</button>
+    </form>
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+    <a href="{% url 'autocompletar' %}">Ir a autocompletado</a>
+</body>
+</html>
